@@ -60,7 +60,7 @@ function Base.getproperty(this::PlayerMovement, s::Symbol)
             this.isMoving = false
             this.canMove = true
             x = 0
-            speed = 5
+            speed = 4
             input = MAIN.input
 
             # Inputs match SDL2 scancodes after "SDL_SCANCODE_"

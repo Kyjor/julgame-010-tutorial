@@ -20,16 +20,10 @@ mutable struct GameManager
     totalCols
     totalRows
 
-    steam
-
     function GameManager()
         this = new()    
 
         this.isAdjusted = false
-        this.steam = C_NULL 
-        if length(MAIN.globals) != 0
-            this.steam = MAIN.globals[1]
-        end
         this.roomBounds = (-2, 6, -7, 7) # up down left right
         # Usage example
         this.totalCols = 5
@@ -60,7 +54,6 @@ function Base.getproperty(this::GameManager, s::Symbol)
             this.player = MAIN.scene.getEntityByName("Player")
             this.cameraTarget = this.player.scripts[1].cameraTarget
             update_entered_room(this, 0, 0)
-            fill_rooms(this, MAIN.scene.getEntityByName("Key"), MAIN.scene.getEntityByName("Exit"))
         end
     elseif s == :update
         function(deltaTime)
@@ -82,7 +75,6 @@ end
 function checkToMoveCamera(this::GameManager)
     offsetX = 0
     offsetY = 0
-    validSwitch = false
 
     if this.cameraTarget.position.y > this.roomBounds[1] && this.player.transform.position.y < this.roomBounds[1] - 1
         println("rowToCheck")
@@ -90,7 +82,6 @@ function checkToMoveCamera(this::GameManager)
         rowToCheck = this.currentRow - 1
         if rowToCheck >= 1 && this.rooms[rowToCheck, this.currentCol] != 0
             println("valid room above: ", rowToCheck, " ", this.currentCol)
-            validSwitch = true
         end
         this.currentRow = rowToCheck
     elseif this.cameraTarget.position.y < this.roomBounds[2] && this.player.transform.position.y > this.roomBounds[2] + 1
@@ -98,7 +89,6 @@ function checkToMoveCamera(this::GameManager)
         rowToCheck = this.currentRow + 1
         if rowToCheck <= this.totalRows && this.rooms[rowToCheck, this.currentCol] != 0
             println("valid room below: ", rowToCheck, " ", this.currentCol)
-            validSwitch = true
         end
         this.currentRow = rowToCheck
     elseif this.cameraTarget.position.x > this.roomBounds[3] && this.player.transform.position.x < this.roomBounds[3] - 1
@@ -106,7 +96,6 @@ function checkToMoveCamera(this::GameManager)
         colToCheck = this.currentCol - 1
         if colToCheck >= 1 && this.rooms[this.currentRow, colToCheck] != 0
             println("valid room left: ", this.currentRow, " ", colToCheck)
-            validSwitch = true
         end
         this.currentCol = colToCheck
     elseif this.cameraTarget.position.x < this.roomBounds[4] && this.player.transform.position.x > this.roomBounds[4] + 1
@@ -115,13 +104,11 @@ function checkToMoveCamera(this::GameManager)
         
         if colToCheck <= this.totalCols && this.rooms[this.currentRow, colToCheck] != 0
             println("valid room right: ", this.currentRow, " ", colToCheck)
-            validSwitch = true
         end
         this.currentCol = colToCheck
     end
 
     if (offsetX != 0 || offsetY != 0)
-        println( MAIN.scene.getEntityByName("Key").transform.position, " : Key    ", MAIN.scene.getEntityByName("Exit").transform.position, " : Exit    ", this.player.transform.position, " : Player")
         update_entered_room(this, offsetX, offsetY)
     end
 end
@@ -284,11 +271,5 @@ function fill_rooms(this, key, exit)
     for index in indices
         row = index[1]
         col = index[2]
-        if this.rooms[row, col] == 2
-            key.transform.position = Vector2f((col - this.startCol) * 15, ((this.startRow - row) * -10) + 2)
-        end
-        if this.rooms[row, col] == 3
-            exit.transform.position = Vector2f((col - this.startCol) * 15, ((this.startRow - row) * -10) + 2)
-        end
     end
 end
