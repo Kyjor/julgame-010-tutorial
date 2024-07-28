@@ -1,0 +1,8 @@
+name = "LifeBound"
+uuid = "c86e6512-13ad-4cb8-a305-d9a62f3cd09b"
+authors = ["Kyjor <kyjordev@gmail.com>"]
+version = "0.0.1"
+
+[deps]
+JulGame = "4850f9bb-d191-4a1e-9f97-ee64062927c3"
+CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"

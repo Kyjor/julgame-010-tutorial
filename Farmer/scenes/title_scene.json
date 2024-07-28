@@ -1,0 +1,52 @@
+{
+    "Entities": [
+        {
+            "isActive": true,
+            "name": "TitleManager",
+            "scripts": [
+                {
+                    "name": "Title",
+                    "parameters": [
+                    ]
+                }
+            ],
+            "id": 1,
+            "components": [
+                {
+                    "position": {
+                        "x": -2,
+                        "y": 1
+                    },
+                    "type": "Transform",
+                    "scale": {
+                        "x": 1,
+                        "y": 1
+                    }
+                }
+            ]
+        }
+    ],
+    "UIElements": [
+        {
+            "fontSize": 40,
+            "name": "TextBox",
+            "id": 1,
+            "isWorldEntity": false,
+            "position": {
+                "x": 172,
+                "y": 380
+            },
+            "persistentBetweenScenes": false,
+            "isCenteredX": true,
+            "alpha": 255,
+            "size": {
+                "x": 457,
+                "y": 40
+            },
+            "isCenteredY": true,
+            "fontPath": "Voice7h.ttf",
+            "text": "Press [ENTER] To Start Game",
+            "type": "TextBox"
+        }
+    ]
+}
