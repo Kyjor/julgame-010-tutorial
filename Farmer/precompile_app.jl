@@ -1,3 +1,3 @@
-using LifeBound
+using Farmer
 
-LifeBound.julia_main()
+Farmer.julia_main()
