@@ -27,7 +27,7 @@ end
 function Base.getproperty(this::GameManager, s::Symbol)
     if s == :initialize
         function()
-            this.player = MAIN.scene.getEntityByName("Player")
+            this.player = JulGame.SceneModule.get_entity_by_name(MAIN.scene, "Player")
             MAIN.scene.camera.target = this.player.transform
             MAIN.cameraBackgroundColor = (155, 212, 195)
         end

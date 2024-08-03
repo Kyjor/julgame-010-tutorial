@@ -49,7 +49,7 @@ function Base.getproperty(this::Title, s::Symbol)
                 end
             end
 
-            if MAIN.input.getButtonPressed("RETURN")
+            if InputModule.get_button_pressed(MAIN.input, "RETURN")
                 MainLoop.change_scene("game_scene.json")
             end
 

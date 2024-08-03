@@ -8,7 +8,7 @@ module Farmer
         JulGame.MAIN = JulGame.Main(Float64(1.0))
         JulGame.PIXELS_PER_UNIT = 16
         scene = Scene("title_scene.json")
-        return scene.init("Farmer", false, Vector2(960, 640),Vector2(960, 640), true, 1.0, true, 60, globals)
+        return SceneBuilderModule.load_and_prepare_scene(scene, "Farmer", false, Vector2(960, 640),Vector2(960, 640), true, 1.0, true, 60, globals)
         return main
     end
 

@@ -39,7 +39,7 @@ function Base.getproperty(this::EnemyMovement, s::Symbol)
     if s == :initialize
         function()
             this.enemy = this.parent.scripts[1]
-            this.player = MAIN.scene.getEntityByName("Player")
+            this.player = JulGame.SceneModule.get_entity_by_name(MAIN.scene, "Player")
         end
     elseif s == :update
         function(deltaTime)

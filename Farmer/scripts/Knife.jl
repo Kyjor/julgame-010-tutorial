@@ -29,10 +29,10 @@ end
 function Base.getproperty(this::Knife, s::Symbol)
     if s == :initialize
         function()
-            this.player = MAIN.scene.getEntityByName("Player")
+            this.player = JulGame.SceneModule.get_entity_by_name(MAIN.scene, "Player")
             this.knifeOffset = Vector2f(this.parent.transform.position.x - this.player.transform.position.x, this.parent.transform.position.y - this.player.transform.position.y)
             this.parent.sprite.rotation = 30
-            this.soundManager = MAIN.scene.getEntityByName("Sound Manager").scripts[1]
+            this.soundManager = JulGame.SceneModule.get_entity_by_name(MAIN.scene, "Sound Manager").scripts[1]
         end
     elseif s == :update
         function(deltaTime)

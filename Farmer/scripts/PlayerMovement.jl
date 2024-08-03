@@ -1,3 +1,5 @@
+using JulGame.Component
+using JulGame.InputModule
 using JulGame.Macros
 using JulGame.Math
 using JulGame.MainLoop
@@ -13,7 +15,6 @@ mutable struct PlayerMovement
     currentDirectionFacing
     elapsedTime
     directions
-    input
     isFacingRight::Bool
     isMoving::Bool
     parent
@@ -31,7 +32,6 @@ mutable struct PlayerMovement
 
         this.canMove = false
         this.elapsedTime = 0.0
-        this.input = C_NULL
         this.isFacingRight = true
         this.directions = ["down", "up", "left", "right"]
         this.currentDirectionFacing = 1
@@ -48,7 +48,7 @@ function Base.getproperty(this::PlayerMovement, s::Symbol)
             this.cameraTarget = Transform(Vector2f(0, 1.5))
             MAIN.scene.camera.target = this.cameraTarget
             this.startingY = this.parent.sprite.offset.y
-            this.soundManager = MAIN.scene.getEntityByName("Sound Manager").scripts[1]
+            this.soundManager = JulGame.SceneModule.get_entity_by_name(MAIN.scene, "Sound Manager").scripts[1]
 
             this.left = true
             this.stepTime = 0.0
@@ -69,7 +69,7 @@ function Base.getproperty(this::PlayerMovement, s::Symbol)
             if !this.isMoving && this.animator.currentAnimation != this.animator.animations[this.currentDirectionFacing]
                 this.animator.currentAnimation = this.animator.animations[this.currentDirectionFacing]
             end
-            if (input.getButtonHeldDown("A") || input.xDir == -1) && this.canMove
+            if (InputModule.get_button_held_down(input, "A") || input.xDir == -1) && this.canMove
                 if this.currentDirectionFacing != 3
                     this.currentDirectionFacing = 3
                 end
@@ -81,8 +81,8 @@ function Base.getproperty(this::PlayerMovement, s::Symbol)
                 x = -speed
                 this.parent.transform.position = Vector2f(this.parent.transform.position.x + x * deltaTime, this.parent.transform.position.y)
                 this.bob()
-            elseif (input.getButtonHeldDown("D")  || input.xDir == 1) && this.canMove
-                if input.getButtonPressed("D") && this.currentDirectionFacing != 4
+            elseif (InputModule.get_button_held_down(input, "D")  || input.xDir == 1) && this.canMove
+                if InputModule.get_button_pressed(input, "D") && this.currentDirectionFacing != 4
                     this.currentDirectionFacing = 4
                     this.animator.currentAnimation = this.animator.animations[4]
                 end
@@ -91,7 +91,7 @@ function Base.getproperty(this::PlayerMovement, s::Symbol)
                 x = speed
                 this.parent.transform.position = Vector2f(this.parent.transform.position.x + x * deltaTime, this.parent.transform.position.y)
                 this.bob()
-            elseif (input.getButtonHeldDown("W") || input.yDir == -1) && this.canMove
+            elseif (InputModule.get_button_held_down(input, "W") || input.yDir == -1) && this.canMove
                 if this.currentDirectionFacing != 2
                     this.currentDirectionFacing = 2
                     this.animator.currentAnimation = this.animator.animations[2]
@@ -103,7 +103,7 @@ function Base.getproperty(this::PlayerMovement, s::Symbol)
                 this.parent.transform.position = Vector2f(this.parent.transform.position.x, this.parent.transform.position.y + y * deltaTime)
                 this.bob()
 
-            elseif (input.getButtonHeldDown("S")  || input.yDir == 1) && this.canMove
+            elseif (InputModule.get_button_held_down(input, "S")  || input.yDir == 1) && this.canMove
                 if this.currentDirectionFacing != 1
                     this.currentDirectionFacing = 1
                     this.animator.currentAnimation = this.animator.animations[1]
@@ -117,11 +117,11 @@ function Base.getproperty(this::PlayerMovement, s::Symbol)
 
             if this.isMoving
                 if this.left && this.stepTime > .2
-                    this.soundManager.stepSound_0.toggleSound()
+                    Component.toggle_sound(this.soundManager.stepSound_0)
                     this.left = false
                     this.stepTime = 0.0
                 elseif this.stepTime > .2
-                    this.soundManager.stepSound_1.toggleSound()
+                    Component.toggle_sound(this.soundManager.stepSound_1)
                     this.left = true
                     this.stepTime = 0.0
                 end
